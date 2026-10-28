@@ -856,9 +856,9 @@ body.editing #stage { cursor: default; }
     ['data', 'Data hub', 'Your source data, how clean it is, and every correction.', 800, [737, 503]],
     ['forecast-top', 'Demand forecast', 'Expected sales for the next 30 days, by product and location.', 760, [812, 409]],
     ['forecast-chart', 'Sales and forecast', 'Past sales, corrected for gaps, then the next 30 days.', 640, [705, 291]],
-    ['network', 'Decision receipt', 'How the lead time and the quantity were reached.', 850, [685, 382]],
     ['disrupt-top', 'Disruptions', 'Outside news that delays deliveries or changes demand.', 870, [816, 330]],
     ['disrupt-time', 'When disruptions hit', 'Each signal’s delay or extra demand over the next 30 days.', 560, [586, 320]],
+    ['network', 'Decision receipt', 'How the lead time and the quantity were reached.', 850, [685, 382]],
   ];
   const shotCards = SHOTS.map(([img, title, line, perchX, look], i) => ({ key: 'shot-' + img, tone: 'white', shot: { perchX, look },
     html: `${hdrW('OUR FEATURES', '%N%')}
@@ -872,7 +872,8 @@ body.editing #stage { cursor: default; }
     <div class="shot vid"><video src="media/demo.mp4" muted playsinline preload="auto"></video><div class="vbar"><i></i></div><div class="vhint">CLICK VIDEO TO PAUSE</div></div>
     ${count('%N%')}` };
   const bot = S.splice(S.findIndex(c => c.key === 'bot'), 1)[0];
-  S.splice(2, 0, ...shotCards, bot, videoCard);
+  const receiptCard = shotCards.pop();
+  S.splice(2, 0, ...shotCards, bot, videoCard, receiptCard);
   S.forEach((c, i) => { const n = String(i + 1).padStart(2, '0'); c.html = c.html.replaceAll('%N%', n).replaceAll('%T%', String(S.length)); });
   window.PITCH = S;
 })();
@@ -919,9 +920,11 @@ body.editing #stage { cursor: default; }
   const byKey = k => P.find(s => s.key === k);
   SLIDES.push({ ...byKey('problem'), anchors: [onTop(124, 262, 44, 'point', [343, 330]), onTop(343, 262, 44, 'tada', [600, 300])], stepStyle: 'hop', loop: true });
   SLIDES.push({ ...byKey('solution'), anchors: [hover(479, 146, 46, 'present', [479, 360])] });
-  P.filter(s => s.shot).forEach(s => SLIDES.push({ ...s, anchors: [onTop(s.shot.perchX, 160, 34, 'point', s.shot.look)] }));
+  const shotSlide = s => ({ ...s, anchors: [onTop(s.shot.perchX, 160, 34, 'point', s.shot.look)] });
+  P.filter(s => s.shot && s.key !== 'shot-network').forEach(s => SLIDES.push(shotSlide(s)));
   SLIDES.push({ ...byKey('bot'), anchors: [hover(118, 300, 70, 'present', [560, 280])], talk: true, loop: true });
   SLIDES.push({ ...byKey('demo'), anchors: [onTop(880, 160, 34, 'think', [480, 370])] });
+  SLIDES.push(shotSlide(byKey('shot-network')));
   SLIDES.push({ ...byKey('different'), anchors: [hover(880, 96, 40, 'point', [700, 330])] });
   SLIDES.push({ ...byKey('perf'), anchors: [onTop(700, 176, 34, 'point', [355, 350])] });
   SLIDES.push({ ...byKey('trust'), anchors: [onTop(387, 81, 22, 'perch', [700, 81])], chain: [1, 2, 3, 4, 5, 6].map(i => onTop(387, 81 + i * 64, 22, i === 6 ? 'tada' : 'perch', [700, 81 + i * 64])), chainMark: 'box', loop: true });
