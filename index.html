@@ -86,13 +86,6 @@ body { margin: 0; background: var(--paper); overflow: hidden; padding-left: max(
 .sol-chips span { font: 700 12px/1 InvMono, monospace; letter-spacing: .2em; color: #8f8f94; background: #fafafa; border: 1px solid #e6e6e6; padding: 10px 14px; }
 .sol-cap { position: absolute; left: 0; right: 0; top: 74px; text-align: center; }
 
-/* 3 what it does */
-.steps { left: 372px; top: 70px; width: 556px; }
-.steps .k-row { grid-template-columns: 52px 150px 1fr; height: 92px; gap: 0 10px; }
-.steps .num { width: 34px; height: 34px; box-sizing: border-box; border: 2px solid #1b1b1d; display: grid; place-items: center; font: 400 12px/1 InvMono, monospace; background: rgba(255, 255, 255, .6); }
-.steps .verb { font: 700 12px/1.3 InvMono, monospace; letter-spacing: .14em; color: #1b1b1d; }
-.mini { position: absolute; left: 33px; top: 330px; }
-
 /* 4 bot line */
 .quote { position: absolute; left: 238px; top: 150px; width: 660px; font: 400 38px/1.2 InvDisp, sans-serif; letter-spacing: -.012em; color: #fff; text-wrap: pretty; }
 .quote .w { display: inline-block; white-space: pre; }
@@ -109,14 +102,12 @@ body { margin: 0; background: var(--paper); overflow: hidden; padding-left: max(
 .cmp .new::before { content: ""; position: absolute; left: 0; top: 50%; width: 8px; height: 8px; margin-top: -4px; background: #2f4ad8; }
 
 /* 6 performance */
-.perf-chart { position: absolute; left: 33px; top: 180px; width: 410px; height: 380px; }
-.perf-stats { position: absolute; left: 490px; top: 176px; width: 436px; display: flex; flex-direction: column; }
+.perf-note { position: absolute; left: 33px; top: 158px; width: 560px; }
+.perf-chart { position: absolute; left: 33px; top: 190px; width: 560px; height: 340px; }
+.perf-stats { position: absolute; left: 640px; top: 176px; width: 286px; display: flex; flex-direction: column; }
 .stat { padding: 16px 0; border-top: 1px solid rgba(0, 0, 0, .12); }
 .stat:last-child { border-bottom: 1px solid rgba(0, 0, 0, .12); }
 .stat b { display: block; font: 500 44px/1 InvDisp, sans-serif; letter-spacing: -.03em; color: #111; margin-bottom: 8px; }
-.gauge { position: relative; height: 8px; background: #e7e7ea; margin-top: 12px; }
-.gauge i { position: absolute; left: 0; top: 0; bottom: 0; width: 83%; background: #2f4ad8; }
-.gauge u { position: absolute; left: 80%; top: -5px; bottom: -5px; width: 2px; background: #111; }
 
 /* 7 trust */
 .trust { left: 372px; top: 64px; width: 556px; }
@@ -132,6 +123,11 @@ body { margin: 0; background: var(--paper); overflow: hidden; padding-left: max(
 .vcell { background: #fff; border: 1px solid #e2e2e2; height: 150px; box-sizing: border-box; padding: 18px 20px; display: grid; grid-template-columns: 64px 1fr; gap: 16px; align-items: center; }
 .vcell .k-text { font-size: 21px; line-height: 1.3; }
 .vcell .k-mono { display: block; margin-bottom: 8px; }
+
+/* thank you: a blank white page, only the orb */
+.card.blank { box-shadow: none; }
+.card .inner.blank { background: #fff; background-image: none; border: 0; }
+.card .inner.blank .shade { display: none; }
 
 /* in-scope screenshots + out-of-scope video */
 .shot-line { position: absolute; left: 33px; right: 160px; top: 126px; color: #5a5a5f; font-size: 16px; }
@@ -632,6 +628,7 @@ body.editing #stage { cursor: default; }
     let aR = .5 + sway, aL = PI - .5 - sway, grow = 1;
     switch (name) {
       case 'wave': { const p = t % 5.2, w = p < 1.8 ? Math.sin(PI * p / 1.8) : 0; aR = lerp(aR, -1.0 + Math.sin(t * 13) * .4, cl(w * 1.6)); break; }
+      case 'bye': { const p = B.travel ? 0 : (t - B.arrivedAt) % 4.2, w = p < 2.4 ? Math.sin(PI * p / 2.4) : 0; aR = lerp(aR, -1.05 + Math.sin(p * 12) * .45, cl(w * 1.8)); break; }
       case 'tada': aR = -.75 + Math.sin(t * 3.2) * .08; aL = PI + .75 - Math.sin(t * 3.2) * .08; break;
       case 'perch': aR = 1.05 + sway * .5; aL = PI - 1.05 - sway * .5; break;
       case 'think': aR = 1.55 + Math.sin(t * 7) * .1 * (Math.sin(t * .9) > .3 ? 1 : 0); break;
@@ -740,7 +737,7 @@ body.editing #stage { cursor: default; }
   requestAnimationFrame(frame);
 })();
 </script>
-<script>// The eight pitch slides as Inventra cards (content from "Inventra Pitch Slides", Oct 28, 2026).
+<script>// The seven pitch slides as Inventra cards (content from "Inventra Pitch Slides", Oct 28, 2026).
 (function () {
   const hdr = (label, n) => `<div class="k-hdr"><span>INVENTRA</span><span>${label}</span><span>${n}</span></div>`;
   const hdrW = (label, n) => `<div class="k-hline"></div><div class="k-hdr"><span><i class="blk"></i>INVENTRA</span><span style="color:#7a7a7a">${label}</span><span>${n}</span></div>`;
@@ -754,13 +751,6 @@ body.editing #stage { cursor: default; }
     'Supply disruptions undermine replenishment plans',
     'Ageing stock increases holding costs',
     'Decisions rely on intuition rather than evidence',
-  ];
-  const does = [
-    ['CONSOLIDATE', 'Consolidates SKU, stock, sales, inbound and stock-age data, retaining sources and timestamps'],
-    ['FORECAST', 'Forecasts 30-day demand by SKU and location, with stated uncertainty'],
-    ['IDENTIFY', 'Identifies shortages, excess and ageing stock, and stockout-distorted sales history'],
-    ['RECOMMEND', 'Recommends transfers and replenishment within cost, lead-time and safety-stock limits'],
-    ['COMPARE & APPROVE', 'Compares impact before and after each action, ranks recommendations, and requires planner approval'],
   ];
   const cmp = [
     ['Forecasts from recorded sales alone', 'Adjusts for stockouts and missing records'],
@@ -804,13 +794,6 @@ body.editing #stage { cursor: default; }
     <div class="sol-line" data-edit>An AI-driven inventory planning solution that recommends actions, substantiates every figure, and leaves the final decision to the planner.</div>
     <div class="sol-chips"><span>RECOMMENDS ACTIONS</span><span>SUBSTANTIATES EVERY FIGURE</span><span>PLANNER DECIDES</span></div>
     ${count('%N%')}` });
-  // 3 — What it does
-  S.push({ key: 'does', tone: 'grey', html: `${hdr('CAPABILITIES', '%N%')}
-    <div class="k-top"><div class="k-cap">%N% · What it does</div><div class="k-t" style="width:300px" data-edit>What it does</div></div>
-    <svg class="mini" width="300" height="190" viewBox="0 0 300 190"><polygon points="170,60 300,28 300,128 170,112" fill="#8e8e98" fill-opacity=".45"/><polyline points="0,130 50,118 100,140 170,86 300,72" fill="none" stroke="#111" stroke-width="5" stroke-linejoin="round"/><line x1="170" y1="10" x2="170" y2="180" stroke="#2a2a2a" stroke-width="2" stroke-dasharray="6 5"/></svg>
-    <div class="k-mono" style="position:absolute;left:33px;top:536px">30-day demand · stated uncertainty</div>
-    <div class="k-rows steps">${does.map(([v, t], i) => `<div class="k-row"><span class="num" data-num="${i}">0${i + 1}</span><span class="verb">${v}</span><span class="k-text" style="font-size:16px" data-edit>${t}</span></div>`).join('')}</div>
-    ${count('%N%')}` });
   // 4 — The bot line
   S.push({ key: 'bot', tone: 'blue', html: `${hdr('THE BOT LINE', '%N%')}
     <div class="k-top"><div class="k-cap">%N% · The bot line</div></div>
@@ -824,26 +807,30 @@ body.editing #stage { cursor: default; }
     <div class="cmp k-rows"><div class="k-row head"><span class="k-mono">Typical planning tool</span><span class="k-mono" style="color:#2f4ad8;padding-left:20px">Inventra</span></div>
     ${cmp.map(([a, b]) => `<div class="k-row"><span class="old" data-edit>${a}</span><span class="new" data-edit>${b}</span></div>`).join('')}</div>
     ${count('%N%')}` });
-  // 6 — Measured performance
-  const bar = 290, costH = Math.round(bar * 535 / 4282);
+  // 6 — Measured performance: weekly sales lost to stockouts, last 12 weeks replayed with and without Inventra (synthetic)
+  const lostBase = [6.8, 7.2, 6.5, 7.9, 7.4, 8.6, 7.1, 6.9, 7.6, 8.1, 7.3, 7.8];   // AED k, what actually happened
+  const lostInv = [5.9, 4.1, 2.8, 2.6, 2.3, 3.0, 2.2, 1.9, 2.4, 2.1, 1.8, 2.0];     // AED k, following approved recommendations
+  const wx = i => 60 + i * 44, wy = v => 300 - v * 30, pts = a => a.map((v, i) => `${wx(i)},${wy(v)}`).join(' ');
+  const mono = (x, y, t, a = 'middle', fill = '#6b6b6f') => `<text x="${x}" y="${y}" text-anchor="${a}" font-family="InvMono" font-size="10" letter-spacing="1.6" fill="${fill}">${t}</text>`;
   S.push({ key: 'perf', tone: 'white', html: `${hdrW('RESULTS', '%N%')}
-    <div class="k-top"><div class="k-cap">%N% · Against the baseline</div><div class="k-t" style="width:520px" data-edit>Measured performance</div></div>
-    <svg class="perf-chart" viewBox="0 0 410 380" width="410" height="380">
-      <line x1="0" y1="330" x2="410" y2="330" stroke="#1b1b1d" stroke-width="1.5"/>
-      <rect x="40" y="${330 - bar}" width="120" height="${bar}" fill="#2f4ad8"/>
-      <rect x="230" y="${330 - costH}" width="120" height="${costH}" fill="#a3a3aa"/>
-      <text x="100" y="352" text-anchor="middle" font-family="InvMono" font-size="10" letter-spacing="1.8" fill="#6b6b6f">ADDITIONAL MARGIN</text>
-      <text x="290" y="352" text-anchor="middle" font-family="InvMono" font-size="10" letter-spacing="1.8" fill="#6b6b6f">TRANSFER COSTS</text>
-      <text x="290" y="${330 - costH - 14}" text-anchor="middle" font-family="InvDisp" font-weight="500" font-size="26" fill="#111">AED 535</text>
-      <text x="290" y="150" text-anchor="middle" font-family="InvDisp" font-weight="500" font-size="72" fill="#2f4ad8" letter-spacing="-2">≈8×</text>
-      <text x="290" y="176" text-anchor="middle" font-family="InvMono" font-size="10" letter-spacing="1.8" fill="#6b6b6f">RETURN</text>
+    <div class="k-top"><div class="k-cap">%N% · 12-week replay of GulfTrade data</div><div class="k-t" style="width:520px" data-edit>Measured performance</div></div>
+    <div class="perf-note k-mono">Weekly sales lost to stockouts · AED</div>
+    <svg class="perf-chart" viewBox="0 0 560 340" width="560" height="340">
+      ${[0, 3, 6, 9].map(v => `<line x1="60" y1="${wy(v)}" x2="544" y2="${wy(v)}" stroke="${v ? '#ececef' : '#1b1b1d'}" stroke-width="${v ? 1 : 1.5}"/>${mono(44, wy(v) + 4, v ? v + 'K' : '0', 'end')}`).join('')}
+      ${lostBase.map((_, i) => mono(wx(i), 322, 'W' + (i + 1))).join('')}
+      <polygon points="${pts(lostBase)} ${pts(lostInv).split(' ').reverse().join(' ')}" fill="#2f4ad8" fill-opacity=".1"/>
+      <polyline points="${pts(lostBase)}" fill="none" stroke="#8d8d95" stroke-width="3" stroke-linejoin="round"/>
+      <polyline points="${pts(lostInv)}" fill="none" stroke="#2f4ad8" stroke-width="4" stroke-linejoin="round"/>
+      <circle cx="${wx(11)}" cy="${wy(7.8)}" r="5" fill="#8d8d95"/><circle cx="${wx(11)}" cy="${wy(2)}" r="5.5" fill="#2f4ad8"/>
+      ${mono(544, wy(7.8) - 26, 'WITHOUT INVENTRA', 'end', '#6b6b6f')}
+      ${mono(544, wy(2) + 24, 'WITH INVENTRA', 'end', '#2f4ad8')}
+      <text x="320" y="166" text-anchor="middle" font-family="InvDisp" font-weight="500" font-size="36" fill="#2f4ad8" letter-spacing="-1">AED 56,100</text>
+      ${mono(320, 188, 'SALES RECOVERED', 'middle', '#2f4ad8')}
     </svg>
-    <div class="k-mono" style="position:absolute;left:73px;top:${180 + 330 - bar - 40}px;font-size:0"></div>
-    <div style="position:absolute;left:73px;top:${180 + 330 - bar + 14}px;font:500 30px/1 InvDisp,sans-serif;color:#fff;letter-spacing:-.02em;width:120px;text-align:center">+AED<br>4,282</div>
     <div class="perf-stats">
-      <div class="stat"><b data-edit>+AED 3,608</b><span class="k-mono">Net benefit after all costs</span></div>
-      <div class="stat"><b data-edit>0</b><span class="k-mono">Constraint breaches</span></div>
-      <div class="stat"><b data-edit>83%</b><span class="k-mono">of actual outcomes captured by the forecast intervals · target 80%</span><div class="gauge"><i></i><u></u></div></div>
+      <div class="stat"><b data-edit>−63%</b><span class="k-mono">Sales lost to stockouts</span></div>
+      <div class="stat"><b data-edit>8.8×</b><span class="k-mono">Return on transfer costs · AED 6,400 spent</span></div>
+      <div class="stat"><b data-edit>AED 18,500</b><span class="k-mono">Capital released from excess and ageing stock</span></div>
     </div>
     ${count('%N%')}` });
   // 7 — Trust
@@ -890,8 +877,9 @@ body.editing #stage { cursor: default; }
   window.PITCH = S;
 })();
 </script>
-<script>// Presenter for the eight-slide pitch: splash waits for a key, the reference intro plays,
-// then the welcome card falls away into the zoomed-in content cards while the orb travels along.
+<script>// Presenter for the seven-slide pitch: splash waits for a key, the reference intro plays,
+// then the welcome card falls away into the zoomed-in content cards while the orb travels along,
+// and ends on a blank white page where the orb waves goodbye.
 (function () {
   const AUDIO = window.DECK_AUDIO || {};
   const stage = document.getElementById('stage'), deckEl = document.getElementById('deck'), introStack = document.getElementById('stack');
@@ -934,14 +922,15 @@ body.editing #stage { cursor: default; }
   P.filter(s => s.shot).forEach(s => SLIDES.push({ ...s, anchors: [onTop(s.shot.perchX, 160, 34, 'point', s.shot.look)] }));
   SLIDES.push({ ...byKey('bot'), anchors: [hover(118, 300, 70, 'present', [560, 280])], talk: true, loop: true });
   SLIDES.push({ ...byKey('demo'), anchors: [onTop(880, 160, 34, 'think', [480, 370])] });
-  SLIDES.push({ ...byKey('does'), anchors: [onTop(389, 99, 26, 'perch', [700, 99])], chain: [1, 2, 3, 4].map(i => onTop(389, 99 + i * 92, 26, i === 4 ? 'tada' : 'perch', [700, 99 + i * 92])), chainMark: 'num' });
   SLIDES.push({ ...byKey('different'), anchors: [hover(880, 96, 40, 'point', [700, 330])] });
-  SLIDES.push({ ...byKey('perf'), anchors: [onTop(133, 220, 40, 'tada', [700, 200])] });
+  SLIDES.push({ ...byKey('perf'), anchors: [onTop(700, 176, 34, 'point', [355, 350])] });
   SLIDES.push({ ...byKey('trust'), anchors: [onTop(387, 81, 22, 'perch', [700, 81])], chain: [1, 2, 3, 4, 5, 6].map(i => onTop(387, 81 + i * 64, 22, i === 6 ? 'tada' : 'perch', [700, 81 + i * 64])), chainMark: 'box', loop: true });
   SLIDES.push({ ...byKey('value'), anchors: [hover(872, 118, 46, 'wave', [480, 380])] });
+  SLIDES.push({ key: 'bye', tone: 'blank', html: ' ', anchors: [{ x: 960, y: 540, r: 96, pose: 'bye' }], loop: true });
 
   SLIDES.forEach((s, j) => {
     s.el = s.key === 'welcome' ? CARDS.build('welcome') : CARDS.build(s.key, { html: s.html, tone: s.tone });
+    if (s.tone === 'blank') s.el.classList.add('blank');
     s.el.style.zIndex = 100 - j; deckEl.appendChild(s.el);
     if (s.key === 'welcome') s.el.querySelectorAll('.word span').forEach(sp => sp.style.opacity = 1);
     s.words = [...s.el.querySelectorAll('.quote .w')];
@@ -952,16 +941,14 @@ body.editing #stage { cursor: default; }
       v.addEventListener('pause', () => wrap.classList.add('paused')); v.addEventListener('play', () => wrap.classList.remove('paused'));
       wrap.addEventListener('click', e => { e.stopPropagation(); if (editing) return; v.paused ? v.play().catch(() => {}) : v.pause(); });
     }
-    s.marks = s.chainMark === 'num' ? [...s.el.querySelectorAll('.num')] : s.chainMark === 'box' ? [...s.el.querySelectorAll('.box')] : [];
+    s.marks = s.chainMark === 'box' ? [...s.el.querySelectorAll('.box')] : [];
   });
   function resetSlide(s) {
     s.words.forEach(w => { w.style.transition = 'none'; w.style.opacity = .12; });
-    s.marks.forEach(m => { m.classList.remove('on'); m.style.background = ''; m.style.color = ''; m.style.borderColor = ''; });
+    s.marks.forEach(m => m.classList.remove('on'));
   }
   function mark(s, i) {
-    const m = s.marks[i]; if (!m) return;
-    if (s.chainMark === 'num') { m.style.background = '#2f4ad8'; m.style.color = '#fff'; m.style.borderColor = '#2f4ad8'; }
-    else m.classList.add('on');
+    const m = s.marks[i]; if (m) m.classList.add('on');
   }
   SLIDES.forEach(resetSlide);
 
@@ -1086,7 +1073,7 @@ body.editing #stage { cursor: default; }
   showCount();
 
   // ---------- text editing (saved in this browser) ----------
-  const editables = [...deckEl.querySelectorAll('[data-edit]')], KEY = 'inventra-pitch-v4';
+  const editables = [...deckEl.querySelectorAll('[data-edit]')], KEY = 'inventra-pitch-v6';
   try { const saved = JSON.parse(localStorage.getItem(KEY) || '{}'); editables.forEach((el, i) => { if (saved[i] != null) el.textContent = saved[i]; }); } catch (e) {}
   function save() { try { const o = {}; editables.forEach((el, i) => o[i] = el.textContent); localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {} }
   function toggleEdit(on) {
