@@ -128,6 +128,8 @@ body { margin: 0; background: var(--paper); overflow: hidden; padding-left: max(
 .card.blank { box-shadow: none; }
 .card .inner.blank { background: #fff; background-image: none; border: 0; }
 .card .inner.blank .shade { display: none; }
+.bye-t { position: absolute; left: 0; right: 0; top: 90px; margin: 0; text-align: center; font-size: 64px; }
+.bye-note { position: absolute; left: 179px; width: 600px; top: 430px; text-align: center; font-size: 20px; color: #5a5a5f; }
 
 /* in-scope screenshots + out-of-scope video */
 .shot-line { position: absolute; left: 33px; right: 160px; top: 126px; color: #5a5a5f; font-size: 16px; }
@@ -836,8 +838,6 @@ body.editing #stage { cursor: default; }
   // 7 — Trust
   S.push({ key: 'trust', tone: 'grey', html: `${hdr('TRUST', '%N%')}
     <div class="k-top"><div class="k-cap">%N% · Trust</div><div class="k-t" style="width:310px" data-edit>Why Inventra can be trusted</div></div>
-    <div class="tstat" style="top:300px"><b>65</b><span class="k-mono">Automated tests</span></div>
-    <div class="tstat" style="top:420px"><b>0</b><span class="k-mono">Constraint breaches</span></div>
     <div class="k-rows trust">${trust.map((t, i) => `<div class="k-row"><span class="box" data-box="${i}">${tick}</span><span class="k-text" style="font-size:16px" data-edit>${t}</span></div>`).join('')}</div>
     ${count('%N%')}` });
   // 8 — Business value
@@ -929,7 +929,8 @@ body.editing #stage { cursor: default; }
   SLIDES.push({ ...byKey('perf'), anchors: [onTop(700, 176, 34, 'point', [355, 350])] });
   SLIDES.push({ ...byKey('trust'), anchors: [onTop(387, 81, 22, 'perch', [700, 81])], chain: [1, 2, 3, 4, 5, 6].map(i => onTop(387, 81 + i * 64, 22, i === 6 ? 'tada' : 'perch', [700, 81 + i * 64])), chainMark: 'box', loop: true });
   SLIDES.push({ ...byKey('value'), anchors: [hover(872, 118, 46, 'wave', [480, 380])] });
-  SLIDES.push({ key: 'bye', tone: 'blank', html: ' ', anchors: [{ x: 960, y: 540, r: 96, pose: 'bye' }], loop: true });
+  SLIDES.push({ key: 'bye', tone: 'blank', html: `<div class="k-t bye-t" data-edit>Thank you</div>
+    <div class="k-text bye-note" data-edit>Thank you for your time and attention. We would love to hear your questions.</div>`, anchors: [{ x: 960, y: 540, r: 96, pose: 'bye' }], loop: true });
 
   SLIDES.forEach((s, j) => {
     s.el = s.key === 'welcome' ? CARDS.build('welcome') : CARDS.build(s.key, { html: s.html, tone: s.tone });
