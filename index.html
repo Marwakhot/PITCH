@@ -858,8 +858,8 @@ body.editing #stage { cursor: default; }
     ['forecast-chart', 'Sales and forecast', 'Past sales, corrected for gaps, then the next 30 days.', 640, [705, 291]],
     ['disrupt-top', 'Disruptions', 'Outside news that delays deliveries or changes demand.', 870, [816, 330]],
     ['disrupt-time', 'When disruptions hit', 'Each signal’s delay or extra demand over the next 30 days.', 560, [586, 320]],
-    ['network', 'Decision receipt', 'How the lead time and the quantity were reached.', 850, [685, 382]],
     ['log', 'Decision log', 'Every approved decision, frozen at approval and reviewed against actuals.', 850, [760, 330]],
+    ['network', 'Decision receipt', 'How the lead time and the quantity were reached.', 850, [685, 382]],
   ];
   const shotCards = SHOTS.map(([img, title, line, perchX, look], i) => ({ key: 'shot-' + img, tone: 'white', shot: { perchX, look },
     html: `${hdrW('OUR FEATURES', '%N%')}
@@ -873,8 +873,9 @@ body.editing #stage { cursor: default; }
     <div class="shot vid"><video src="media/demo.mp4" muted playsinline preload="auto"></video><div class="vbar"><i></i></div><div class="vhint">CLICK VIDEO TO PAUSE</div></div>
     ${count('%N%')}` };
   const bot = S.splice(S.findIndex(c => c.key === 'bot'), 1)[0];
-  const afterDemo = shotCards.splice(-2); // decision receipt + decision log
-  S.splice(2, 0, ...shotCards, bot, videoCard, ...afterDemo);
+  const [logCard, receiptCard] = shotCards.splice(-2);
+  const trustCard = S.splice(S.findIndex(c => c.key === 'trust'), 1)[0];
+  S.splice(2, 0, ...shotCards, bot, videoCard, trustCard, logCard, receiptCard);
   S.forEach((c, i) => { const n = String(i + 1).padStart(2, '0'); c.html = c.html.replaceAll('%N%', n).replaceAll('%T%', String(S.length)); });
   window.PITCH = S;
 })();
@@ -922,14 +923,14 @@ body.editing #stage { cursor: default; }
   SLIDES.push({ ...byKey('problem'), anchors: [onTop(124, 262, 44, 'point', [343, 330]), onTop(343, 262, 44, 'tada', [600, 300])], stepStyle: 'hop', loop: true });
   SLIDES.push({ ...byKey('solution'), anchors: [hover(479, 146, 46, 'present', [479, 360])] });
   const shotSlide = s => ({ ...s, anchors: [onTop(s.shot.perchX, 160, 34, 'point', s.shot.look)] });
-  const AFTER_DEMO = ['shot-network', 'shot-log'];
+  const AFTER_DEMO = ['shot-log', 'shot-network'];
   P.filter(s => s.shot && !AFTER_DEMO.includes(s.key)).forEach(s => SLIDES.push(shotSlide(s)));
   SLIDES.push({ ...byKey('bot'), anchors: [hover(118, 300, 70, 'present', [560, 280])], talk: true, loop: true });
   SLIDES.push({ ...byKey('demo'), anchors: [onTop(880, 160, 34, 'think', [480, 370])] });
+  SLIDES.push({ ...byKey('trust'), anchors: [onTop(387, 81, 22, 'perch', [700, 81])], chain: [1, 2, 3, 4, 5, 6].map(i => onTop(387, 81 + i * 64, 22, i === 6 ? 'tada' : 'perch', [700, 81 + i * 64])), chainMark: 'box', loop: true });
   AFTER_DEMO.forEach(k => SLIDES.push(shotSlide(byKey(k))));
   SLIDES.push({ ...byKey('different'), anchors: [hover(880, 96, 40, 'point', [700, 330])] });
   SLIDES.push({ ...byKey('perf'), anchors: [onTop(700, 176, 34, 'point', [355, 350])] });
-  SLIDES.push({ ...byKey('trust'), anchors: [onTop(387, 81, 22, 'perch', [700, 81])], chain: [1, 2, 3, 4, 5, 6].map(i => onTop(387, 81 + i * 64, 22, i === 6 ? 'tada' : 'perch', [700, 81 + i * 64])), chainMark: 'box', loop: true });
   SLIDES.push({ ...byKey('value'), anchors: [hover(872, 118, 46, 'wave', [480, 380])] });
   SLIDES.push({ key: 'bye', tone: 'blank', html: `<div class="k-t bye-t" data-edit>Thank you</div>
     <div class="k-text bye-note" data-edit>Thank you for your time and attention. We would love to hear your questions.</div>`, anchors: [{ x: 960, y: 540, r: 96, pose: 'bye' }], loop: true });
